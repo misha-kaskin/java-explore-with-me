@@ -1,6 +1,5 @@
 package ru.practicum.explorewithme.events.service;
 
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
 import org.springframework.web.client.RestTemplate;
 import ru.practicum.explorewithme.events.dto.StatData;

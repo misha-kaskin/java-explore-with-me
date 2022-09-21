@@ -2,13 +2,10 @@ package ru.practicum.explorewithme.events.service;
 
 import com.querydsl.core.types.dsl.BooleanExpression;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
-import org.springframework.http.HttpEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
-import org.springframework.web.client.RestTemplate;
 import ru.practicum.explorewithme.categories.dto.CategoryDto;
 import ru.practicum.explorewithme.categories.storage.CategoryRepository;
 import ru.practicum.explorewithme.events.dto.*;
