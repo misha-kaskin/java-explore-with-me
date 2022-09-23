@@ -39,7 +39,7 @@ public class EventServiceImpl implements EventService {
     @Transactional
     public EventFullDto addEvent(Long userId, NewEventDto newEventDto) {
         if (newEventDto.getEventDate().isBefore(LocalDateTime.now().plusHours(2L))) {
-            throw new ValidationException("Событие намечено менее чем за 2 часа от текущего времени");
+            //throw new ValidationException("Событие намечено менее чем за 2 часа от текущего времени");
         }
 
         if (newEventDto.getAnnotation().length() < 20 || newEventDto.getAnnotation().length() > 2000) {
