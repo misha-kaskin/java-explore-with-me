@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/main/explore-with-me-server.iml" filepath="$PROJECT_DIR$/main/explore-with-me-server.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/java-exlore-with-me.iml" filepath="$PROJECT_DIR$/.idea/java-exlore-with-me.iml" />
+      <module fileurl="file://$PROJECT_DIR$/stats/stats-server.iml" filepath="$PROJECT_DIR$/stats/stats-server.iml" />
+    </modules>
+  </component>
+</project>
