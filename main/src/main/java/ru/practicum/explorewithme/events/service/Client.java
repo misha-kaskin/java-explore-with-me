@@ -12,8 +12,8 @@ import java.time.LocalDateTime;
 public class Client {
     private static final RestTemplate restTemplate = new RestTemplate();
     @Value("${stats-server-url}")
-    private String URL;
-    private String API = "/hit";
+    private String url;
+    private String api = "/hit";
 
     public void post(String app, String remoteAddr, String requestURI) {
         HttpEntity<StatData> httpEntity = new HttpEntity<>(StatData.builder()
@@ -23,6 +23,6 @@ public class Client {
                 .timestamp(LocalDateTime.now())
                 .build());
 
-        restTemplate.postForObject(URL + API, httpEntity, StatData.class);
+        restTemplate.postForObject(url + api, httpEntity, StatData.class);
     }
 }
