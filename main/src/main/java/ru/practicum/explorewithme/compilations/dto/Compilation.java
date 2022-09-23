@@ -15,9 +15,7 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class CompilationDto {
-    @Transient
-    List<EventShortDto> events;
+public class Compilation {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -25,4 +23,6 @@ public class CompilationDto {
     private Boolean pinned;
     @NotBlank
     private String title;
+    @Transient
+    private List<EventShortDto> events;
 }

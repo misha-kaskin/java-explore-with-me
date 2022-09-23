@@ -1,19 +1,19 @@
 package ru.practicum.explorewithme.requests.service;
 
-import ru.practicum.explorewithme.requests.dto.RequestDto;
+import ru.practicum.explorewithme.requests.dto.Request;
 
 import java.util.List;
 
 public interface RequestService {
-    RequestDto addRequest(Long userId, Long eventId);
+    Request addRequest(Long userId, Long eventId);
 
-    List<RequestDto> getRequests(Long userId);
+    List<Request> getRequests(Long userId);
 
-    RequestDto cancelRequest(Long userId, Long requestId);
+    Request cancelRequest(Long userId, Long requestId);
 
-    List<RequestDto> getRequestsByUserEventId(Long userId, Long eventId);
+    List<Request> getRequestsByUserEventId(Long userId, Long eventId);
 
-    RequestDto confirmRequest(Long userId, Long eventId, Long reqId);
+    Request confirmRequest(Long userId, Long eventId, Long reqId);
 
-    RequestDto rejectRequest(Long userId, Long eventId, Long reqId);
+    Request rejectRequest(Long userId, Long eventId, Long reqId);
 }

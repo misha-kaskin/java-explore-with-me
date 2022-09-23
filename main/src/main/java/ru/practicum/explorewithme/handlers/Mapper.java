@@ -1,13 +1,16 @@
-package ru.practicum.explorewithme.events.dto;
+package ru.practicum.explorewithme.handlers;
 
 import lombok.RequiredArgsConstructor;
-import ru.practicum.explorewithme.categories.dto.CategoryDto;
+import ru.practicum.explorewithme.categories.dto.Category;
 import ru.practicum.explorewithme.categories.storage.CategoryRepository;
+import ru.practicum.explorewithme.compilations.dto.EventCompilation;
+import ru.practicum.explorewithme.events.dto.*;
 import ru.practicum.explorewithme.users.dto.ShortUserDto;
-import ru.practicum.explorewithme.users.dto.UserDto;
+import ru.practicum.explorewithme.users.dto.User;
 import ru.practicum.explorewithme.users.storage.UserRepository;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @RequiredArgsConstructor
 public class Mapper {
@@ -34,14 +37,15 @@ public class Mapper {
                 .build();
     }
 
-    public static ShortUserDto mapUserDtoToShort(UserDto userDto) {
+    public static ShortUserDto mapUserDtoToShort(User userDto) {
         return ShortUserDto.builder()
                 .id(userDto.getId())
                 .name(userDto.getName())
                 .build();
     }
 
-    public static EventFullDto mapEventToFullDto(Event event, CategoryDto categoryDto, UserDto userDto) {
+    public static EventFullDto mapEventToFullDto(Event event, Category categoryDto,
+                                                 User userDto, List<String> nearestLocations) {
         return EventFullDto.builder()
                 .annotation(event.getAnnotation())
                 .category(categoryDto)
@@ -59,10 +63,11 @@ public class Mapper {
                 .state(event.getState())
                 .title(event.getTitle())
                 .views(event.getViews())
+                .nearestLocations(nearestLocations)
                 .build();
     }
 
-    public static EventShortDto mapEventToShortDto(Event event, CategoryDto categoryDto, UserDto userDto) {
+    public static EventShortDto mapEventToShortDto(Event event, Category categoryDto, User userDto) {
         return EventShortDto.builder()
                 .annotation(event.getAnnotation())
                 .category(categoryDto)
@@ -73,6 +78,13 @@ public class Mapper {
                 .paid(event.getPaid())
                 .title(event.getTitle())
                 .views(event.getViews())
+                .build();
+    }
+
+    public static EventCompilation mapEventCompilation(Long eventId, Long compilationId) {
+        return EventCompilation.builder()
+                .eventId(eventId)
+                .compilationId(compilationId)
                 .build();
     }
 }

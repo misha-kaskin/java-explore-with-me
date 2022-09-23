@@ -3,10 +3,10 @@ package ru.practicum.explorewithme.compilations.storage;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.Query;
-import ru.practicum.explorewithme.compilations.dto.CompilationDto;
+import ru.practicum.explorewithme.compilations.dto.Compilation;
 
-public interface CompilationRepository extends JpaRepository<CompilationDto, Long> {
-    @Query("select c from CompilationDto c where c.pinned = ?1")
-    Page<CompilationDto> findAllPinnedCompilations(Boolean pinned, Pageable pageable);
+public interface CompilationRepository extends JpaRepository<Compilation, Long> {
+    Page<Compilation> findAllByPinned(Boolean pinned, Pageable pageable);
+
+    Compilation findCompilationById(Long compId);
 }

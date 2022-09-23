@@ -12,9 +12,6 @@ public interface SpecificLocationRepository extends JpaRepository<SpecificLocati
             "where l.name = ?1")
     Boolean existsByName(String name);
 
-    @Query("select l " +
-            "from SpecificLocation l " +
-            "where l.name = ?1")
     SpecificLocation findSpecificLocationByName(String locationName);
 
     @Query(nativeQuery = true,
@@ -34,5 +31,5 @@ public interface SpecificLocationRepository extends JpaRepository<SpecificLocati
                     "           from locations " +
                     "           where (lon - ?1) * (lon - ?1) + (lat - ?2) * (lat - ?2) < radius * radius) as s " +
                     "           on f.dist < s.dist) as t")
-    List<Object[]> findNearestLocation(Float lon, Float lat);
+    List<String> findNearestLocation(Float lon, Float lat);
 }

@@ -1,17 +1,17 @@
 package ru.practicum.explorewithme.categories.service;
 
-import ru.practicum.explorewithme.categories.dto.CategoryDto;
+import ru.practicum.explorewithme.categories.dto.Category;
 
 import java.util.List;
 
 public interface CategoryService {
-    CategoryDto addCategory(CategoryDto categoryDto);
+    Category addCategory(Category categoryDto);
 
-    CategoryDto updateCategory(CategoryDto categoryDto);
+    Category updateCategory(Category categoryDto);
 
-    List<CategoryDto> getCategories(Integer from, Integer size);
+    List<Category> getCategories(Integer from, Integer size);
 
-    CategoryDto getCategoryById(Long id);
+    Category getCategoryById(Long id);
 
     void deleteCategoryById(Long id);
 }

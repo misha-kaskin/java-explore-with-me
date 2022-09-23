@@ -10,8 +10,11 @@ import javax.validation.constraints.NotNull;
 @Getter
 @AllArgsConstructor
 public class Location {
+    // географические координаты события
+    // широта
     @NotNull
     private Float lat;
+    // долгота
     @NotNull
     private Float lon;
 }

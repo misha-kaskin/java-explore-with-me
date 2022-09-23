@@ -16,16 +16,10 @@ public interface EventRepository extends JpaRepository<Event, Long>, QuerydslPre
             "from Event e where e.category = ?1")
     Boolean existsByCategoryId(Long id);
 
-    @Query("select e from Event e where e.initiator = ?1")
-    Page<Event> findAllByUserId(Long userId, Pageable pageable);
+    Page<Event> findAllByInitiator(Long userId, Pageable pageable);
 
     @Query("select e from Event e where e.id in ?1")
-    List<Event> findAllById(List<Long> id);
-
-    @Query("select case when (count(l) > 0) then true else false end " +
-            "from SpecificLocation l " +
-            "where ((l.lon - ?1) * (l.lon - ?1) + (l.lat - ?2) * (l.lat - ?2)) < (l.radius * l.radius)")
-    Boolean belongsLocation(Float lon, Float lat);
+    List<Event> findAllByIds(List<Long> id);
 
     @Query("select e.id " +
             "from Event e " +

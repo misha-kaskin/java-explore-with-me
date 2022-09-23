@@ -1,13 +1,13 @@
 package ru.practicum.explorewithme.users.service;
 
-import ru.practicum.explorewithme.users.dto.UserDto;
+import ru.practicum.explorewithme.users.dto.User;
 
 import java.util.List;
 
 public interface UserService {
-    UserDto addUser(UserDto user);
+    User addUser(User user);
 
-    List<UserDto> findUsers(List<Long> ids, Integer from, Integer size);
+    List<User> findUsers(List<Long> ids, Integer from, Integer size);
 
     void deleteUser(Long id);
 }

@@ -2,6 +2,7 @@ package ru.practicum.explorewithme.specificlocation.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import ru.practicum.explorewithme.exception.NotFoundException;
 import ru.practicum.explorewithme.exception.ValidationException;
 import ru.practicum.explorewithme.specificlocation.dto.SpecificLocation;
@@ -19,6 +20,7 @@ public class SpecificLocationServiceImpl implements SpecificLocationService {
     private final UserRepository userRepository;
 
     @Override
+    @Transactional
     public SpecificLocation addLocation(SpecificLocation specificLocation) {
         if (specificLocationRepository.existsByName(specificLocation.getName())) {
             throw new ValidationException("Такая локация уже существует");
@@ -35,6 +37,7 @@ public class SpecificLocationServiceImpl implements SpecificLocationService {
     }
 
     @Override
+    @Transactional
     public SpecificLocation userAddLocation(Long userId, SpecificLocation specificLocation) {
         if (!userRepository.existsById(userId)) {
             throw new NotFoundException("Пользователь с заданным id не найден");
@@ -50,6 +53,7 @@ public class SpecificLocationServiceImpl implements SpecificLocationService {
     }
 
     @Override
+    @Transactional
     public SpecificLocation approveLocation(Long locId) {
         if (!specificLocationRepository.existsById(locId)) {
             throw new NotFoundException("Локация не найдена");
@@ -67,6 +71,7 @@ public class SpecificLocationServiceImpl implements SpecificLocationService {
     }
 
     @Override
+    @Transactional
     public SpecificLocation rejectLocation(Long locId) {
         if (!specificLocationRepository.existsById(locId)) {
             throw new NotFoundException("Локация не найдена");
@@ -84,6 +89,7 @@ public class SpecificLocationServiceImpl implements SpecificLocationService {
     }
 
     @Override
+    @Transactional
     public SpecificLocation updateLocation(Long locId, SpecificLocationUpdate specificLocationUpdate) {
         if (!specificLocationRepository.existsById(locId)) {
             throw new NotFoundException("Локация не найдена");

@@ -2,12 +2,13 @@ package ru.practicum.explorewithme.requests.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import ru.practicum.explorewithme.events.dto.Event;
 import ru.practicum.explorewithme.events.dto.State;
 import ru.practicum.explorewithme.events.storage.EventRepository;
 import ru.practicum.explorewithme.exception.NotFoundException;
 import ru.practicum.explorewithme.exception.ValidationException;
-import ru.practicum.explorewithme.requests.dto.RequestDto;
+import ru.practicum.explorewithme.requests.dto.Request;
 import ru.practicum.explorewithme.requests.dto.Status;
 import ru.practicum.explorewithme.requests.storage.RequestRepository;
 import ru.practicum.explorewithme.users.storage.UserRepository;
@@ -23,7 +24,8 @@ public class RequestServiceImpl implements RequestService {
     private final EventRepository eventRepository;
 
     @Override
-    public RequestDto addRequest(Long userId, Long eventId) {
+    @Transactional
+    public Request addRequest(Long userId, Long eventId) {
         if (!userRepository.existsById(userId)) {
             throw new NotFoundException("Пользователь не найден");
         }
@@ -52,34 +54,34 @@ public class RequestServiceImpl implements RequestService {
             }
         }
 
-        if (!event.getRequestModeration() || event.getParticipantLimit() == 0) {
+        Status status;
+
+        if (!event.getRequestModeration()) {
             Long requests = event.getConfirmedRequests();
             event.setConfirmedRequests(++requests);
 
             eventRepository.save(event);
-            return requestRepository.save(RequestDto.builder()
-                    .requester(userId)
-                    .event(eventId)
-                    .created(LocalDateTime.now())
-                    .status(Status.APPROVED)
-                    .build());
+
+            status = Status.CONFIRMED;
         } else {
-            return requestRepository.save(RequestDto.builder()
-                    .requester(userId)
-                    .event(eventId)
-                    .created(LocalDateTime.now())
-                    .status(Status.PENDING)
-                    .build());
+            status = Status.PENDING;
         }
+
+        return requestRepository.save(Request.builder()
+                .requester(userId)
+                .event(eventId)
+                .created(LocalDateTime.now())
+                .status(status)
+                .build());
     }
 
     @Override
-    public List<RequestDto> getRequests(Long userId) {
+    public List<Request> getRequests(Long userId) {
         if (!userRepository.existsById(userId)) {
             throw new NotFoundException("Не найден пользователь");
         }
 
-        List<RequestDto> requestDtoList = requestRepository.getRequestDtoByUserId(userId);
+        List<Request> requestDtoList = requestRepository.findRequestByRequester(userId);
 
         if (requestDtoList.isEmpty()) {
             throw new NotFoundException("Запросы не найдены");
@@ -89,7 +91,8 @@ public class RequestServiceImpl implements RequestService {
     }
 
     @Override
-    public RequestDto cancelRequest(Long userId, Long requestId) {
+    @Transactional
+    public Request cancelRequest(Long userId, Long requestId) {
         if (!userRepository.existsById(userId)) {
             throw new NotFoundException("Пользователь не найден");
         }
@@ -98,7 +101,7 @@ public class RequestServiceImpl implements RequestService {
             throw new NotFoundException("Запрос не найден");
         }
 
-        RequestDto requestDto = requestRepository.getReferenceById(requestId);
+        Request requestDto = requestRepository.getReferenceById(requestId);
 
         if (!requestDto.getRequester().equals(userId)) {
             throw new ValidationException("Неверный id пользователя");
@@ -108,7 +111,7 @@ public class RequestServiceImpl implements RequestService {
             throw new ValidationException("Повторное удаление события");
         }
 
-        if (requestDto.getStatus().equals(Status.APPROVED)) {
+        if (requestDto.getStatus().equals(Status.CONFIRMED)) {
             Event event = eventRepository.getReferenceById(requestDto.getEvent());
 
             Long requests = event.getConfirmedRequests();
@@ -122,7 +125,7 @@ public class RequestServiceImpl implements RequestService {
     }
 
     @Override
-    public List<RequestDto> getRequestsByUserEventId(Long userId, Long eventId) {
+    public List<Request> getRequestsByUserEventId(Long userId, Long eventId) {
         if (!userRepository.existsById(userId)) {
             throw new NotFoundException("Не найден пользователь");
         }
@@ -131,7 +134,13 @@ public class RequestServiceImpl implements RequestService {
             throw new NotFoundException("Событие не найдено");
         }
 
-        List<RequestDto> requestDtoList = requestRepository.getRequestDtoByUserIdEventId(userId, eventId);
+        Event event = eventRepository.getReferenceById(eventId);
+
+        if (!event.getInitiator().equals(userId)) {
+            throw new ValidationException("Пользователь не является инициатором события");
+        }
+
+        List<Request> requestDtoList = requestRepository.getRequestByEvent(eventId);
 
         if (requestDtoList.isEmpty()) {
             throw new NotFoundException("Не найдены запросы");
@@ -141,7 +150,8 @@ public class RequestServiceImpl implements RequestService {
     }
 
     @Override
-    public RequestDto confirmRequest(Long userId, Long eventId, Long reqId) {
+    @Transactional
+    public Request confirmRequest(Long userId, Long eventId, Long reqId) {
         if (!userRepository.existsById(userId)) {
             throw new NotFoundException("Не найден пользователь");
         }
@@ -164,13 +174,13 @@ public class RequestServiceImpl implements RequestService {
             throw new ValidationException("Достигнут лимит участников");
         }
 
-        RequestDto requestDto = requestRepository.getReferenceById(reqId);
+        Request requestDto = requestRepository.getReferenceById(reqId);
 
         if (!requestDto.getStatus().equals(Status.PENDING)) {
-            throw new ValidationException("Некорректный статус события");
+            throw new ValidationException("Некорректный статус заявки " + requestDto.getStatus());
         }
 
-        requestDto.setStatus(Status.APPROVED);
+        requestDto.setStatus(Status.CONFIRMED);
         requestRepository.save(requestDto);
 
         Long requests = event.getConfirmedRequests();
@@ -178,20 +188,27 @@ public class RequestServiceImpl implements RequestService {
         eventRepository.save(event);
 
         if (requests.equals(event.getParticipantLimit())) {
-            List<RequestDto> requestDtoList = requestRepository
-                    .getRequestDtoByEventIdAndStatus(eventId, Status.PENDING);
+            List<Request> requestDtoList = requestRepository
+                    .getRequestByEventAndStatus(eventId, Status.PENDING);
 
-            for (RequestDto request : requestDtoList) {
+            for (Request request : requestDtoList) {
                 request.setStatus(Status.REJECTED);
                 requestRepository.save(request);
             }
         }
 
-        return requestDto;
+        return Request.builder()
+                .id(requestDto.getId())
+                .requester(requestDto.getRequester())
+                .status(requestDto.getStatus())
+                .event(requestDto.getEvent())
+                .created(requestDto.getCreated())
+                .build();
     }
 
     @Override
-    public RequestDto rejectRequest(Long userId, Long eventId, Long reqId) {
+    @Transactional
+    public Request rejectRequest(Long userId, Long eventId, Long reqId) {
         if (!userRepository.existsById(userId)) {
             throw new NotFoundException("Не найден пользователь");
         }
@@ -204,7 +221,7 @@ public class RequestServiceImpl implements RequestService {
             throw new NotFoundException("Запрос не найден");
         }
 
-        RequestDto requestDto = requestRepository.getReferenceById(reqId);
+        Request requestDto = requestRepository.getReferenceById(reqId);
 
         if (!requestDto.getStatus().equals(Status.PENDING)) {
             throw new ValidationException("Некорректный статус");

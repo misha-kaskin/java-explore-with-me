@@ -2,7 +2,7 @@ package ru.practicum.explorewithme.compilations.controller;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
-import ru.practicum.explorewithme.compilations.dto.CompilationDto;
+import ru.practicum.explorewithme.compilations.dto.Compilation;
 import ru.practicum.explorewithme.compilations.dto.NewCompilationDto;
 import ru.practicum.explorewithme.compilations.service.CompilationService;
 
@@ -17,7 +17,7 @@ public class CompilationController {
     private final CompilationService compilationService;
 
     @PostMapping("/admin/compilations")
-    public NewCompilationDto addCompilation(@RequestBody @Valid NewCompilationDto compilationDto) {
+    public Compilation addCompilation(@RequestBody @Valid NewCompilationDto compilationDto) {
         return compilationService.addCompilation(compilationDto);
     }
 
@@ -49,14 +49,14 @@ public class CompilationController {
     }
 
     @GetMapping("/compilations")
-    public List<CompilationDto> getCompilations(@RequestParam(required = false) Boolean pinned,
-                                                @RequestParam(defaultValue = "0") @PositiveOrZero Integer from,
-                                                @RequestParam(defaultValue = "10") @Positive Integer size) {
+    public List<Compilation> getCompilations(@RequestParam(required = false) Boolean pinned,
+                                             @RequestParam(defaultValue = "0") @PositiveOrZero Integer from,
+                                             @RequestParam(defaultValue = "10") @Positive Integer size) {
         return compilationService.getCompilations(pinned, from, size);
     }
 
     @GetMapping("/compilations/{compId}")
-    public CompilationDto getCompilation(@PathVariable Long compId) {
+    public Compilation getCompilation(@PathVariable Long compId) {
         return compilationService.getCompilation(compId);
     }
 }

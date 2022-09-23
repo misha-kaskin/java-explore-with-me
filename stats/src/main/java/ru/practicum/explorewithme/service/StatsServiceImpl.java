@@ -7,10 +7,8 @@ import ru.practicum.explorewithme.dto.ViewStats;
 import ru.practicum.explorewithme.exception.NotFoundException;
 import ru.practicum.explorewithme.storage.StatsRepository;
 
-import java.math.BigInteger;
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -36,21 +34,13 @@ public class StatsServiceImpl implements StatsService {
             throw new NotFoundException("Не найдены записи");
         }
 
-        List<Object[]> objects;
+        List<ViewStats> viewStats;
 
         if (unique == null || !unique) {
-            objects = statsRepository.getViewStats(ids);
+            viewStats = statsRepository.getViewStats(ids);
         } else {
-            objects = statsRepository.getViewStatsWithUniqueIp(ids);
+            viewStats = statsRepository.getViewStatsWithUniqueIp(ids);
         }
-
-        List<ViewStats> viewStats = objects.stream()
-                .map(obj -> ViewStats.builder()
-                        .app(obj[0].toString())
-                        .uri(obj[1].toString())
-                        .hits((BigInteger) obj[2])
-                        .build())
-                .collect(Collectors.toList());
 
         return viewStats;
     }

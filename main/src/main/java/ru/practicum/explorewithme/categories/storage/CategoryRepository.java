@@ -1,10 +1,8 @@
 package ru.practicum.explorewithme.categories.storage;
 
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.Query;
-import ru.practicum.explorewithme.categories.dto.CategoryDto;
+import ru.practicum.explorewithme.categories.dto.Category;
 
-public interface CategoryRepository extends JpaRepository<CategoryDto, Long> {
-    @Query("select c from CategoryDto c where c.id = ?1")
-    CategoryDto findCategoryDtoById(Long id);
+public interface CategoryRepository extends JpaRepository<Category, Long> {
+    Category findCategoryById(Long id);
 }
