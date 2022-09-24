@@ -1,7 +1,7 @@
 package ru.practicum.explorewithme.service;
 
-import ru.practicum.explorewithme.dto.EndpointHit;
-import ru.practicum.explorewithme.dto.ViewStats;
+import ru.practicum.explorewithme.model.EndpointHit;
+import ru.practicum.explorewithme.model.ViewStats;
 
 import java.time.LocalDateTime;
 import java.util.List;

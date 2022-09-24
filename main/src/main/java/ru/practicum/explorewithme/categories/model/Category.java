@@ -1,24 +1,19 @@
-package ru.practicum.explorewithme.users.dto;
+package ru.practicum.explorewithme.categories.model;
 
 import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.*;
-import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
 
 @Entity
-@Table(name = "users")
+@Table(name = "categories")
 @Setter
 @Getter
-public class User {
+public class Category {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @Email
-    private String email;
-    @NotNull
     @NotBlank
     private String name;
 }

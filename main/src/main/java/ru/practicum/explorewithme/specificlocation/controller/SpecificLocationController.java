@@ -2,8 +2,8 @@ package ru.practicum.explorewithme.specificlocation.controller;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
-import ru.practicum.explorewithme.specificlocation.dto.SpecificLocation;
-import ru.practicum.explorewithme.specificlocation.dto.SpecificLocationUpdate;
+import ru.practicum.explorewithme.specificlocation.model.SpecificLocation;
+import ru.practicum.explorewithme.specificlocation.model.SpecificLocationUpdate;
 import ru.practicum.explorewithme.specificlocation.service.SpecificLocationService;
 
 import javax.validation.Valid;

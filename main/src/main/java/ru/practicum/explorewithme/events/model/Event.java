@@ -1,4 +1,4 @@
-package ru.practicum.explorewithme.events.dto;
+package ru.practicum.explorewithme.events.model;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
@@ -27,11 +27,11 @@ public class Event {
     private Long confirmedRequests;
     @JsonSerialize(using = LocalDateTimeSerializer.class)
     @JsonDeserialize(using = LocalDateTimeDeserializer.class)
-    @JsonFormat(pattern = Patterns.defaultPattern)
+    @JsonFormat(pattern = Patterns.DEFAULT_PATTERN)
     private LocalDateTime eventDate;
     @JsonSerialize(using = LocalDateTimeSerializer.class)
     @JsonDeserialize(using = LocalDateTimeDeserializer.class)
-    @JsonFormat(pattern = Patterns.defaultPattern)
+    @JsonFormat(pattern = Patterns.DEFAULT_PATTERN)
     private LocalDateTime createdOn;
     private String description;
     private Long initiator;
@@ -41,7 +41,7 @@ public class Event {
     private Long participantLimit;
     @JsonSerialize(using = LocalDateTimeSerializer.class)
     @JsonDeserialize(using = LocalDateTimeDeserializer.class)
-    @JsonFormat(pattern = Patterns.defaultPattern)
+    @JsonFormat(pattern = Patterns.DEFAULT_PATTERN)
     private LocalDateTime publishedOn;
     private Boolean requestModeration;
     @Enumerated(EnumType.STRING)

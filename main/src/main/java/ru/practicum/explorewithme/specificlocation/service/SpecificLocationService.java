@@ -1,7 +1,7 @@
 package ru.practicum.explorewithme.specificlocation.service;
 
-import ru.practicum.explorewithme.specificlocation.dto.SpecificLocation;
-import ru.practicum.explorewithme.specificlocation.dto.SpecificLocationUpdate;
+import ru.practicum.explorewithme.specificlocation.model.SpecificLocation;
+import ru.practicum.explorewithme.specificlocation.model.SpecificLocationUpdate;
 
 import java.util.List;
 

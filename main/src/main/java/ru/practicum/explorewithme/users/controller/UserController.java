@@ -2,7 +2,7 @@ package ru.practicum.explorewithme.users.controller;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
-import ru.practicum.explorewithme.users.dto.User;
+import ru.practicum.explorewithme.users.model.User;
 import ru.practicum.explorewithme.users.service.UserService;
 
 import javax.validation.Valid;

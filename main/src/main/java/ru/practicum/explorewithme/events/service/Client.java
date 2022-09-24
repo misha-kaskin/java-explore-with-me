@@ -4,7 +4,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
-import ru.practicum.explorewithme.events.dto.StatData;
+import ru.practicum.explorewithme.events.model.StatData;
 
 import java.time.LocalDateTime;
 

@@ -1,4 +1,4 @@
-package ru.practicum.explorewithme.users.dto;
+package ru.practicum.explorewithme.users.model;
 
 import lombok.*;
 

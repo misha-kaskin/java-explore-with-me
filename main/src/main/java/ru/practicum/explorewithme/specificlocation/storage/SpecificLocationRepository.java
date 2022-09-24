@@ -2,7 +2,7 @@ package ru.practicum.explorewithme.specificlocation.storage;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
-import ru.practicum.explorewithme.specificlocation.dto.SpecificLocation;
+import ru.practicum.explorewithme.specificlocation.model.SpecificLocation;
 
 import java.util.List;
 

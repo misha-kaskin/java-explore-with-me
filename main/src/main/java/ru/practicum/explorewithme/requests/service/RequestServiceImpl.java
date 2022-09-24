@@ -3,13 +3,13 @@ package ru.practicum.explorewithme.requests.service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import ru.practicum.explorewithme.events.dto.Event;
-import ru.practicum.explorewithme.events.dto.State;
+import ru.practicum.explorewithme.events.model.Event;
+import ru.practicum.explorewithme.events.model.State;
 import ru.practicum.explorewithme.events.storage.EventRepository;
 import ru.practicum.explorewithme.exception.NotFoundException;
 import ru.practicum.explorewithme.exception.ValidationException;
-import ru.practicum.explorewithme.requests.dto.Request;
-import ru.practicum.explorewithme.requests.dto.Status;
+import ru.practicum.explorewithme.requests.model.Request;
+import ru.practicum.explorewithme.requests.model.Status;
 import ru.practicum.explorewithme.requests.storage.RequestRepository;
 import ru.practicum.explorewithme.users.storage.UserRepository;
 

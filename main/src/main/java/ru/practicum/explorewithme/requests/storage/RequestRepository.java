@@ -2,8 +2,8 @@ package ru.practicum.explorewithme.requests.storage;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
-import ru.practicum.explorewithme.requests.dto.Request;
-import ru.practicum.explorewithme.requests.dto.Status;
+import ru.practicum.explorewithme.requests.model.Request;
+import ru.practicum.explorewithme.requests.model.Status;
 
 import java.util.List;
 

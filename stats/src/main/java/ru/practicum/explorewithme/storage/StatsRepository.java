@@ -2,8 +2,8 @@ package ru.practicum.explorewithme.storage;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
-import ru.practicum.explorewithme.dto.EndpointHit;
-import ru.practicum.explorewithme.dto.ViewStats;
+import ru.practicum.explorewithme.model.EndpointHit;
+import ru.practicum.explorewithme.model.ViewStats;
 
 import java.time.LocalDateTime;
 import java.util.List;

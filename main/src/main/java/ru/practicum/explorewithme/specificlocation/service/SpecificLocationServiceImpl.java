@@ -5,9 +5,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.practicum.explorewithme.exception.NotFoundException;
 import ru.practicum.explorewithme.exception.ValidationException;
-import ru.practicum.explorewithme.specificlocation.dto.SpecificLocation;
-import ru.practicum.explorewithme.specificlocation.dto.SpecificLocationUpdate;
-import ru.practicum.explorewithme.specificlocation.dto.Status;
+import ru.practicum.explorewithme.specificlocation.model.SpecificLocation;
+import ru.practicum.explorewithme.specificlocation.model.SpecificLocationUpdate;
+import ru.practicum.explorewithme.specificlocation.model.Status;
 import ru.practicum.explorewithme.specificlocation.storage.SpecificLocationRepository;
 import ru.practicum.explorewithme.users.storage.UserRepository;
 

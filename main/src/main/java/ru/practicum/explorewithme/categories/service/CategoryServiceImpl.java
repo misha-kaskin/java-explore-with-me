@@ -4,7 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import ru.practicum.explorewithme.categories.dto.Category;
+import ru.practicum.explorewithme.categories.model.Category;
 import ru.practicum.explorewithme.categories.storage.CategoryRepository;
 import ru.practicum.explorewithme.events.storage.EventRepository;
 import ru.practicum.explorewithme.exception.NotFoundException;

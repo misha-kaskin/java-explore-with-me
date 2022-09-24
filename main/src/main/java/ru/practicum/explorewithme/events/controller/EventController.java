@@ -2,7 +2,7 @@ package ru.practicum.explorewithme.events.controller;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
-import ru.practicum.explorewithme.events.dto.*;
+import ru.practicum.explorewithme.events.model.*;
 import ru.practicum.explorewithme.events.service.EventService;
 
 import javax.servlet.http.HttpServletRequest;

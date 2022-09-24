@@ -2,8 +2,8 @@ package ru.practicum.explorewithme.controller;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
-import ru.practicum.explorewithme.dto.EndpointHit;
-import ru.practicum.explorewithme.dto.ViewStats;
+import ru.practicum.explorewithme.model.EndpointHit;
+import ru.practicum.explorewithme.model.ViewStats;
 import ru.practicum.explorewithme.service.StatsServiceImpl;
 
 import javax.validation.Valid;

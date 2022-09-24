@@ -5,7 +5,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.querydsl.QuerydslPredicateExecutor;
-import ru.practicum.explorewithme.events.dto.Event;
+import ru.practicum.explorewithme.events.model.Event;
 
 import java.util.List;
 
@@ -17,9 +17,6 @@ public interface EventRepository extends JpaRepository<Event, Long>, QuerydslPre
     Boolean existsByCategoryId(Long id);
 
     Page<Event> findAllByInitiator(Long userId, Pageable pageable);
-
-    @Query("select e from Event e where e.id in ?1")
-    List<Event> findAllByIds(List<Long> id);
 
     @Query("select e.id " +
             "from Event e " +

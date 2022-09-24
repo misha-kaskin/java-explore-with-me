@@ -1,6 +1,6 @@
 package ru.practicum.explorewithme.events.service;
 
-import ru.practicum.explorewithme.events.dto.*;
+import ru.practicum.explorewithme.events.model.*;
 
 import javax.servlet.http.HttpServletRequest;
 import java.time.LocalDateTime;

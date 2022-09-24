@@ -2,7 +2,7 @@ package ru.practicum.explorewithme.requests.controller;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
-import ru.practicum.explorewithme.requests.dto.Request;
+import ru.practicum.explorewithme.requests.model.Request;
 import ru.practicum.explorewithme.requests.service.RequestService;
 
 import java.util.List;

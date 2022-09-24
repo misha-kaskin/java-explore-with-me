@@ -1,4 +1,4 @@
-package ru.practicum.explorewithme.specificlocation.dto;
+package ru.practicum.explorewithme.specificlocation.model;
 
 import lombok.Getter;
 import lombok.Setter;

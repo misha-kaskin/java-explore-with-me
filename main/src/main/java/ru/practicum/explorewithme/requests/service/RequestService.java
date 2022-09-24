@@ -1,6 +1,6 @@
 package ru.practicum.explorewithme.requests.service;
 
-import ru.practicum.explorewithme.requests.dto.Request;
+import ru.practicum.explorewithme.requests.model.Request;
 
 import java.util.List;
 

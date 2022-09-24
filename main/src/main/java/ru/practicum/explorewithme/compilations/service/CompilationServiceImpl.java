@@ -5,20 +5,20 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import ru.practicum.explorewithme.categories.dto.Category;
+import ru.practicum.explorewithme.categories.model.Category;
 import ru.practicum.explorewithme.categories.storage.CategoryRepository;
-import ru.practicum.explorewithme.compilations.dto.Compilation;
-import ru.practicum.explorewithme.compilations.dto.EventCompilation;
-import ru.practicum.explorewithme.compilations.dto.NewCompilationDto;
+import ru.practicum.explorewithme.compilations.model.Compilation;
+import ru.practicum.explorewithme.compilations.model.EventCompilation;
+import ru.practicum.explorewithme.compilations.model.NewCompilationDto;
 import ru.practicum.explorewithme.compilations.storage.CompilationEventRepository;
 import ru.practicum.explorewithme.compilations.storage.CompilationRepository;
-import ru.practicum.explorewithme.events.dto.Event;
-import ru.practicum.explorewithme.events.dto.EventShortDto;
+import ru.practicum.explorewithme.events.model.Event;
+import ru.practicum.explorewithme.events.model.EventShortDto;
 import ru.practicum.explorewithme.events.storage.EventRepository;
 import ru.practicum.explorewithme.exception.NotFoundException;
 import ru.practicum.explorewithme.exception.ValidationException;
 import ru.practicum.explorewithme.handlers.Mapper;
-import ru.practicum.explorewithme.users.dto.User;
+import ru.practicum.explorewithme.users.model.User;
 import ru.practicum.explorewithme.users.storage.UserRepository;
 
 import java.util.List;
@@ -55,7 +55,7 @@ public class CompilationServiceImpl implements CompilationService {
 
         compilationEventRepository.saveAll(eventCompilations);
 
-        List<EventShortDto> eventShortDtoList = eventRepository.findAllByIds(events)
+        List<EventShortDto> eventShortDtoList = eventRepository.findAllById(events)
                 .stream()
                 .map(event -> mapEventToShortDto(event))
                 .collect(Collectors.toList());
@@ -198,7 +198,7 @@ public class CompilationServiceImpl implements CompilationService {
 
     private void fillCompilation(Compilation compilation) {
         List<Long> eventsIds = compilationEventRepository.findAllByCompilationId(compilation.getId());
-        List<EventShortDto> eventShortDtoList = eventRepository.findAllByIds(eventsIds)
+        List<EventShortDto> eventShortDtoList = eventRepository.findAllById(eventsIds)
                 .stream()
                 .map(event -> mapEventToShortDto(event))
                 .collect(Collectors.toList());

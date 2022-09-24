@@ -7,8 +7,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.practicum.explorewithme.exception.NotFoundException;
 import ru.practicum.explorewithme.exception.ValidationException;
-import ru.practicum.explorewithme.users.dto.QUser;
-import ru.practicum.explorewithme.users.dto.User;
+import ru.practicum.explorewithme.users.model.QUser;
+import ru.practicum.explorewithme.users.model.User;
 import ru.practicum.explorewithme.users.storage.UserRepository;
 
 import java.util.List;

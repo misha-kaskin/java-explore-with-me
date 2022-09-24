@@ -7,17 +7,17 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
-import ru.practicum.explorewithme.categories.dto.Category;
+import ru.practicum.explorewithme.categories.model.Category;
 import ru.practicum.explorewithme.categories.storage.CategoryRepository;
-import ru.practicum.explorewithme.events.dto.*;
+import ru.practicum.explorewithme.events.model.*;
 import ru.practicum.explorewithme.events.storage.EventRepository;
 import ru.practicum.explorewithme.exception.NotFoundException;
 import ru.practicum.explorewithme.exception.ValidationException;
 import ru.practicum.explorewithme.handlers.Mapper;
-import ru.practicum.explorewithme.specificlocation.dto.SpecificLocation;
-import ru.practicum.explorewithme.specificlocation.dto.Status;
+import ru.practicum.explorewithme.specificlocation.model.SpecificLocation;
+import ru.practicum.explorewithme.specificlocation.model.Status;
 import ru.practicum.explorewithme.specificlocation.storage.SpecificLocationRepository;
-import ru.practicum.explorewithme.users.dto.User;
+import ru.practicum.explorewithme.users.model.User;
 import ru.practicum.explorewithme.users.storage.UserRepository;
 
 import javax.servlet.http.HttpServletRequest;
@@ -39,7 +39,7 @@ public class EventServiceImpl implements EventService {
     @Transactional
     public EventFullDto addEvent(Long userId, NewEventDto newEventDto) {
         if (newEventDto.getEventDate().isBefore(LocalDateTime.now().plusHours(2L))) {
-            throw new ValidationException("Событие намечено менее чем за 2 часа от текущего времени");
+            //throw new ValidationException("Событие намечено менее чем за 2 часа от текущего времени");
         }
 
         if (newEventDto.getAnnotation().length() < 20 || newEventDto.getAnnotation().length() > 2000) {
@@ -295,7 +295,7 @@ public class EventServiceImpl implements EventService {
             throw new NotFoundException("Не найдено подходящих событий");
         }
 
-        client.post("GET EVENTS", request.getRemoteAddr(), request.getRequestURI());
+        //client.post("GET EVENTS", request.getRemoteAddr(), request.getRequestURI());
 
         return events;
     }
@@ -320,7 +320,7 @@ public class EventServiceImpl implements EventService {
 
         EventFullDto fullDto = mapEventToFullDto(eventRepository.save(event));
 
-        client.post("GET EVENT BY ID", request.getRemoteAddr(), request.getRequestURI());
+        //client.post("GET EVENT BY ID", request.getRemoteAddr(), request.getRequestURI());
 
         return fullDto;
     }

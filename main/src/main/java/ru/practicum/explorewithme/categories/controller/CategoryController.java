@@ -2,7 +2,7 @@ package ru.practicum.explorewithme.categories.controller;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
-import ru.practicum.explorewithme.categories.dto.Category;
+import ru.practicum.explorewithme.categories.model.Category;
 import ru.practicum.explorewithme.categories.service.CategoryService;
 
 import javax.validation.Valid;

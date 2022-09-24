@@ -1,6 +1,6 @@
 package ru.practicum.explorewithme.users.service;
 
-import ru.practicum.explorewithme.users.dto.User;
+import ru.practicum.explorewithme.users.model.User;
 
 import java.util.List;
 

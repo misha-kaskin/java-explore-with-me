@@ -1,4 +1,4 @@
-package ru.practicum.explorewithme.events.dto;
+package ru.practicum.explorewithme.events.model;
 
 public enum State {
     PENDING, PUBLISHED, CANCELED

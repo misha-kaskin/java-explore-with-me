@@ -1,6 +1,6 @@
 package ru.practicum.explorewithme.categories.service;
 
-import ru.practicum.explorewithme.categories.dto.Category;
+import ru.practicum.explorewithme.categories.model.Category;
 
 import java.util.List;
 

@@ -2,7 +2,7 @@ package ru.practicum.explorewithme.compilations.storage;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
-import ru.practicum.explorewithme.compilations.dto.EventCompilation;
+import ru.practicum.explorewithme.compilations.model.EventCompilation;
 
 import java.util.List;
 

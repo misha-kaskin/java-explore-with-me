@@ -1,12 +1,12 @@
 package ru.practicum.explorewithme.handlers;
 
 import lombok.RequiredArgsConstructor;
-import ru.practicum.explorewithme.categories.dto.Category;
+import ru.practicum.explorewithme.categories.model.Category;
 import ru.practicum.explorewithme.categories.storage.CategoryRepository;
-import ru.practicum.explorewithme.compilations.dto.EventCompilation;
-import ru.practicum.explorewithme.events.dto.*;
-import ru.practicum.explorewithme.users.dto.ShortUserDto;
-import ru.practicum.explorewithme.users.dto.User;
+import ru.practicum.explorewithme.compilations.model.EventCompilation;
+import ru.practicum.explorewithme.events.model.*;
+import ru.practicum.explorewithme.users.model.ShortUserDto;
+import ru.practicum.explorewithme.users.model.User;
 import ru.practicum.explorewithme.users.storage.UserRepository;
 
 import java.time.LocalDateTime;
