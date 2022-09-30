@@ -14,9 +14,6 @@ import ru.practicum.explorewithme.events.storage.EventRepository;
 import ru.practicum.explorewithme.exception.NotFoundException;
 import ru.practicum.explorewithme.exception.ValidationException;
 import ru.practicum.explorewithme.handlers.Mapper;
-import ru.practicum.explorewithme.specificlocation.model.SpecificLocation;
-import ru.practicum.explorewithme.specificlocation.model.Status;
-import ru.practicum.explorewithme.specificlocation.storage.SpecificLocationRepository;
 import ru.practicum.explorewithme.users.model.User;
 import ru.practicum.explorewithme.users.storage.UserRepository;
 
@@ -32,7 +29,6 @@ public class EventServiceImpl implements EventService {
     private final EventRepository eventRepository;
     private final CategoryRepository categoryRepository;
     private final UserRepository userRepository;
-    private final SpecificLocationRepository specificLocationRepository;
     private final Client client;
 
     @Override
@@ -219,24 +215,6 @@ public class EventServiceImpl implements EventService {
         BooleanExpression onlyPublishedEvents = QEvent.event.state.eq(State.PUBLISHED);
         BooleanExpression basedExpression = onlyPublishedEvents;
 
-        if (StringUtils.hasText(locationName)) {
-            if (!specificLocationRepository.existsByName(locationName)) {
-                throw new NotFoundException("Не найдена локация");
-            }
-
-            SpecificLocation specificLocation = specificLocationRepository.findSpecificLocationByName(locationName);
-
-            if (!specificLocation.getStatus().equals(Status.APPROVED)) {
-                throw new ValidationException("Недопустимая локация");
-            }
-
-            List<Long> ids = eventRepository.findAllIdsByLocation(specificLocation.getLon(),
-                    specificLocation.getLat(),
-                    specificLocation.getRadius());
-
-            basedExpression = basedExpression.and(QEvent.event.id.in(ids));
-        }
-
         if (StringUtils.hasText(text)) {
             basedExpression = basedExpression
                     .and(QEvent.event.annotation.containsIgnoreCase(text)
@@ -330,24 +308,6 @@ public class EventServiceImpl implements EventService {
                                              List<Long> categories, LocalDateTime rangeStart,
                                              LocalDateTime rangeEnd, String locationName, Integer from, Integer size) {
         BooleanExpression basedExpression = QEvent.event.paid.eq(true).or(QEvent.event.paid.eq(false));
-
-        if (StringUtils.hasText(locationName)) {
-            if (!specificLocationRepository.existsByName(locationName)) {
-                throw new NotFoundException("Не найдена локация");
-            }
-
-            SpecificLocation specificLocation = specificLocationRepository.findSpecificLocationByName(locationName);
-
-            if (!specificLocation.getStatus().equals(Status.APPROVED)) {
-                throw new ValidationException("Недопустимая локация");
-            }
-
-            List<Long> ids = eventRepository.findAllIdsByLocation(specificLocation.getLon(),
-                    specificLocation.getLat(),
-                    specificLocation.getRadius());
-
-            basedExpression = basedExpression.and(QEvent.event.id.in(ids));
-        }
 
         if (rangeStart != null) {
             basedExpression = basedExpression.and(QEvent.event.eventDate
@@ -501,10 +461,8 @@ public class EventServiceImpl implements EventService {
     private EventFullDto mapEventToFullDto(Event event) {
         Category categoryDto = categoryRepository.findCategoryById(event.getCategory());
         User userDto = userRepository.getReferenceById(event.getInitiator());
-        List<String> nearestLocations = specificLocationRepository
-                .findNearestLocation(event.getLon(), event.getLat());
 
-        return Mapper.mapEventToFullDto(event, categoryDto, userDto, nearestLocations);
+        return Mapper.mapEventToFullDto(event, categoryDto, userDto);
     }
 
     private EventShortDto mapEventToShortDto(Event event) {

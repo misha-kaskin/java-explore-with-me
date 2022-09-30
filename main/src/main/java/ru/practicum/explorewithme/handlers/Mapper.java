@@ -45,7 +45,7 @@ public class Mapper {
     }
 
     public static EventFullDto mapEventToFullDto(Event event, Category categoryDto,
-                                                 User userDto, List<String> nearestLocations) {
+                                                 User userDto) {
         return EventFullDto.builder()
                 .annotation(event.getAnnotation())
                 .category(categoryDto)
@@ -63,7 +63,6 @@ public class Mapper {
                 .state(event.getState())
                 .title(event.getTitle())
                 .views(event.getViews())
-                .nearestLocations(nearestLocations)
                 .build();
     }
 
