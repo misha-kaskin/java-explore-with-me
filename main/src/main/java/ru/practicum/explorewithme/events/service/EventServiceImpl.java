@@ -273,7 +273,7 @@ public class EventServiceImpl implements EventService {
             throw new NotFoundException("Не найдено подходящих событий");
         }
 
-        //client.post("GET EVENTS", request.getRemoteAddr(), request.getRequestURI());
+        client.post("GET EVENTS", request.getRemoteAddr(), request.getRequestURI());
 
         return events;
     }
@@ -298,7 +298,7 @@ public class EventServiceImpl implements EventService {
 
         EventFullDto fullDto = mapEventToFullDto(eventRepository.save(event));
 
-        //client.post("GET EVENT BY ID", request.getRemoteAddr(), request.getRequestURI());
+        client.post("GET EVENT BY ID", request.getRemoteAddr(), request.getRequestURI());
 
         return fullDto;
     }
