@@ -14,6 +14,9 @@ import ru.practicum.explorewithme.events.storage.EventRepository;
 import ru.practicum.explorewithme.exception.NotFoundException;
 import ru.practicum.explorewithme.exception.ValidationException;
 import ru.practicum.explorewithme.handlers.Mapper;
+import ru.practicum.explorewithme.specificlocation.model.SpecificLocation;
+import ru.practicum.explorewithme.specificlocation.model.Status;
+import ru.practicum.explorewithme.specificlocation.storage.SpecificLocationRepository;
 import ru.practicum.explorewithme.users.model.User;
 import ru.practicum.explorewithme.users.storage.UserRepository;
 
@@ -29,13 +32,14 @@ public class EventServiceImpl implements EventService {
     private final EventRepository eventRepository;
     private final CategoryRepository categoryRepository;
     private final UserRepository userRepository;
+    private final SpecificLocationRepository specificLocationRepository;
     private final Client client;
 
     @Override
     @Transactional
     public EventFullDto addEvent(Long userId, NewEventDto newEventDto) {
         if (newEventDto.getEventDate().isBefore(LocalDateTime.now().plusHours(2L))) {
-            //throw new ValidationException("Событие намечено менее чем за 2 часа от текущего времени");
+            throw new ValidationException("Событие намечено менее чем за 2 часа от текущего времени");
         }
 
         if (newEventDto.getAnnotation().length() < 20 || newEventDto.getAnnotation().length() > 2000) {
@@ -56,6 +60,11 @@ public class EventServiceImpl implements EventService {
 
         if (!userRepository.existsById(userId)) {
             throw new NotFoundException("Не найден указанный пользователь");
+        }
+
+        if (!eventRepository.belongsLocation(newEventDto.getLocation().getLon(),
+                newEventDto.getLocation().getLat())) {
+            throw new ValidationException("Событие не принадлежит определенной локации");
         }
 
         Event event = eventRepository.save(Mapper.mapNewEventDtoToEvent(newEventDto, userId));
@@ -215,6 +224,24 @@ public class EventServiceImpl implements EventService {
         BooleanExpression onlyPublishedEvents = QEvent.event.state.eq(State.PUBLISHED);
         BooleanExpression basedExpression = onlyPublishedEvents;
 
+        if (StringUtils.hasText(locationName)) {
+            if (!specificLocationRepository.existsByName(locationName)) {
+                throw new NotFoundException("Не найдена локация");
+            }
+
+            SpecificLocation specificLocation = specificLocationRepository.findSpecificLocationByName(locationName);
+
+            if (!specificLocation.getStatus().equals(Status.APPROVED)) {
+                throw new ValidationException("Недопустимая локация");
+            }
+
+            List<Long> ids = eventRepository.findAllIdsByLocation(specificLocation.getLon(),
+                    specificLocation.getLat(),
+                    specificLocation.getRadius());
+
+            basedExpression = basedExpression.and(QEvent.event.id.in(ids));
+        }
+
         if (StringUtils.hasText(text)) {
             basedExpression = basedExpression
                     .and(QEvent.event.annotation.containsIgnoreCase(text)
@@ -273,7 +300,7 @@ public class EventServiceImpl implements EventService {
             throw new NotFoundException("Не найдено подходящих событий");
         }
 
-        //client.post("GET EVENTS", request.getRemoteAddr(), request.getRequestURI());
+        client.post("GET EVENTS", request.getRemoteAddr(), request.getRequestURI());
 
         return events;
     }
@@ -298,7 +325,7 @@ public class EventServiceImpl implements EventService {
 
         EventFullDto fullDto = mapEventToFullDto(eventRepository.save(event));
 
-        //client.post("GET EVENT BY ID", request.getRemoteAddr(), request.getRequestURI());
+        client.post("GET EVENT BY ID", request.getRemoteAddr(), request.getRequestURI());
 
         return fullDto;
     }
@@ -308,6 +335,24 @@ public class EventServiceImpl implements EventService {
                                              List<Long> categories, LocalDateTime rangeStart,
                                              LocalDateTime rangeEnd, String locationName, Integer from, Integer size) {
         BooleanExpression basedExpression = QEvent.event.paid.eq(true).or(QEvent.event.paid.eq(false));
+
+        if (StringUtils.hasText(locationName)) {
+            if (!specificLocationRepository.existsByName(locationName)) {
+                throw new NotFoundException("Не найдена локация");
+            }
+
+            SpecificLocation specificLocation = specificLocationRepository.findSpecificLocationByName(locationName);
+
+            if (!specificLocation.getStatus().equals(Status.APPROVED)) {
+                throw new ValidationException("Недопустимая локация");
+            }
+
+            List<Long> ids = eventRepository.findAllIdsByLocation(specificLocation.getLon(),
+                    specificLocation.getLat(),
+                    specificLocation.getRadius());
+
+            basedExpression = basedExpression.and(QEvent.event.id.in(ids));
+        }
 
         if (rangeStart != null) {
             basedExpression = basedExpression.and(QEvent.event.eventDate
@@ -461,8 +506,10 @@ public class EventServiceImpl implements EventService {
     private EventFullDto mapEventToFullDto(Event event) {
         Category categoryDto = categoryRepository.findCategoryById(event.getCategory());
         User userDto = userRepository.getReferenceById(event.getInitiator());
+        List<String> nearestLocations = specificLocationRepository
+                .findNearestLocation(event.getLon(), event.getLat());
 
-        return Mapper.mapEventToFullDto(event, categoryDto, userDto);
+        return Mapper.mapEventToFullDto(event, categoryDto, userDto, nearestLocations);
     }
 
     private EventShortDto mapEventToShortDto(Event event) {

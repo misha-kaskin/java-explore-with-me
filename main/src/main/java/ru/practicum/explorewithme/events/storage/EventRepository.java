@@ -17,4 +17,14 @@ public interface EventRepository extends JpaRepository<Event, Long>, QuerydslPre
     Boolean existsByCategoryId(Long id);
 
     Page<Event> findAllByInitiator(Long userId, Pageable pageable);
+
+    @Query("select e.id " +
+            "from Event e " +
+            "where ((e.lon - ?1) * (e.lon - ?1) + (e.lat - ?2) * (e.lat - ?2)) < (?3 * ?3)")
+    List<Long> findAllIdsByLocation(Float lon, Float lat, Float radius);
+
+    @Query("select case when (count(l) > 0) then true else false end " +
+            "from SpecificLocation l " +
+            "where ((l.lon - ?1) * (l.lon - ?1) + (l.lat - ?2) * (l.lat - ?2)) < (l.radius * l.radius)")
+    Boolean belongsLocation(Float lon, Float lat);
 }
