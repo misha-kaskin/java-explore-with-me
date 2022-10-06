@@ -38,7 +38,7 @@ public class EventServiceImpl implements EventService {
     @Override
     @Transactional
     public EventFullDto addEvent(Long userId, NewEventDto newEventDto) {
-        if (newEventDto.getEventDate().isBefore(LocalDateTime.now().plusHours(2L))) {
+        if (LocalDateTime.now().plusHours(2L).isAfter(newEventDto.getEventDate())) {
             throw new ValidationException("Событие намечено менее чем за 2 часа от текущего времени");
         }
 

@@ -1,6 +1,7 @@
 package ru.practicum.explorewithme.specificlocation.service;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.practicum.explorewithme.exception.NotFoundException;
@@ -9,15 +10,16 @@ import ru.practicum.explorewithme.specificlocation.model.SpecificLocation;
 import ru.practicum.explorewithme.specificlocation.model.SpecificLocationUpdate;
 import ru.practicum.explorewithme.specificlocation.model.Status;
 import ru.practicum.explorewithme.specificlocation.storage.SpecificLocationRepository;
-import ru.practicum.explorewithme.users.storage.UserRepository;
+import ru.practicum.explorewithme.users.service.UserService;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
 public class SpecificLocationServiceImpl implements SpecificLocationService {
     private final SpecificLocationRepository specificLocationRepository;
-    private final UserRepository userRepository;
+    private final UserService userService;
 
     @Override
     @Transactional
@@ -26,20 +28,24 @@ public class SpecificLocationServiceImpl implements SpecificLocationService {
             throw new ValidationException("Такая локация уже существует");
         }
 
+        if (specificLocation.getId() != null) {
+            throw new ValidationException("Передан непустой идентификатор");
+        }
+
         specificLocation.setStatus(Status.APPROVED);
 
         return specificLocationRepository.save(specificLocation);
     }
 
     @Override
-    public List<SpecificLocation> getLocations() {
-        return specificLocationRepository.findAll();
+    public List<SpecificLocation> getLocations(Integer from, Integer size) {
+        return specificLocationRepository.findAll(PageRequest.of(from, size)).toList();
     }
 
     @Override
     @Transactional
     public SpecificLocation userAddLocation(Long userId, SpecificLocation specificLocation) {
-        if (!userRepository.existsById(userId)) {
+        if (userService.findUsers(List.of(userId), 0, 1).isEmpty()) {
             throw new NotFoundException("Пользователь с заданным id не найден");
         }
 
@@ -54,48 +60,50 @@ public class SpecificLocationServiceImpl implements SpecificLocationService {
 
     @Override
     @Transactional
-    public SpecificLocation approveLocation(Long locId) {
-        if (!specificLocationRepository.existsById(locId)) {
+    public void approveLocation(Long locId) {
+        Optional<SpecificLocation> optionalSpecificLocation = specificLocationRepository.findById(locId);
+
+        if (!optionalSpecificLocation.isPresent()) {
             throw new NotFoundException("Локация не найдена");
         }
 
-        SpecificLocation specificLocation = specificLocationRepository.getReferenceById(locId);
+        SpecificLocation specificLocation = optionalSpecificLocation.get();
 
         if (!specificLocation.getStatus().equals(Status.WAITING)) {
             throw new ValidationException("Локация не может быть одобрена");
         }
 
         specificLocation.setStatus(Status.APPROVED);
-
-        return specificLocationRepository.save(specificLocation);
     }
 
     @Override
     @Transactional
-    public SpecificLocation rejectLocation(Long locId) {
-        if (!specificLocationRepository.existsById(locId)) {
+    public void rejectLocation(Long locId) {
+        Optional<SpecificLocation> optionalSpecificLocation = specificLocationRepository.findById(locId);
+
+        if (!optionalSpecificLocation.isPresent()) {
             throw new NotFoundException("Локация не найдена");
         }
 
-        SpecificLocation specificLocation = specificLocationRepository.getReferenceById(locId);
+        SpecificLocation specificLocation = optionalSpecificLocation.get();
 
         if (!specificLocation.getStatus().equals(Status.WAITING)) {
             throw new ValidationException("Локация не может быть одобрена");
         }
 
         specificLocation.setStatus(Status.REJECTED);
-
-        return specificLocationRepository.save(specificLocation);
     }
 
     @Override
     @Transactional
     public SpecificLocation updateLocation(Long locId, SpecificLocationUpdate specificLocationUpdate) {
-        if (!specificLocationRepository.existsById(locId)) {
+        Optional<SpecificLocation> optionalSpecificLocation = specificLocationRepository.findById(locId);
+
+        if (!optionalSpecificLocation.isPresent()) {
             throw new NotFoundException("Локация не найдена");
         }
 
-        SpecificLocation specificLocation = specificLocationRepository.getReferenceById(locId);
+        SpecificLocation specificLocation = optionalSpecificLocation.get();
 
         if (specificLocation.getStatus().equals(Status.REJECTED)) {
             throw new ValidationException("Событие не может быть изменено");

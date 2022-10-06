@@ -8,13 +8,13 @@ import java.util.List;
 public interface SpecificLocationService {
     SpecificLocation addLocation(SpecificLocation specificLocation);
 
-    List<SpecificLocation> getLocations();
+    List<SpecificLocation> getLocations(Integer from, Integer size);
 
     SpecificLocation userAddLocation(Long userId, SpecificLocation specificLocation);
 
-    SpecificLocation approveLocation(Long locId);
+    void approveLocation(Long locId);
 
-    SpecificLocation rejectLocation(Long locId);
+    void rejectLocation(Long locId);
 
     SpecificLocation updateLocation(Long locId, SpecificLocationUpdate specificLocationUpdate);
 }

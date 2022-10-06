@@ -15,14 +15,19 @@ public class SpecificLocation {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
     @NotBlank
     private String name;
+
     @NotNull
     private Float lat;
+
     @NotNull
     private Float lon;
+
     @NotNull
     private Float radius;
+
     @Enumerated(EnumType.STRING)
     private Status status;
 }

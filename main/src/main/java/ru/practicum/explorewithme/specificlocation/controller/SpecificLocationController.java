@@ -20,8 +20,9 @@ public class SpecificLocationController {
     }
 
     @GetMapping("/admin/locations")
-    public List<SpecificLocation> getLocations() {
-        return specificLocationService.getLocations();
+    public List<SpecificLocation> getLocations(@RequestParam(defaultValue = "0") Integer from,
+                                               @RequestParam(defaultValue = "10") Integer size) {
+        return specificLocationService.getLocations(from, size);
     }
 
     @PostMapping("/users/{userId}/locations")
@@ -30,14 +31,14 @@ public class SpecificLocationController {
         return specificLocationService.userAddLocation(userId, specificLocation);
     }
 
-    @PatchMapping("/admin/locations/{locId}/approve")
-    public SpecificLocation approveLocation(@PathVariable Long locId) {
-        return specificLocationService.approveLocation(locId);
+    @GetMapping("/admin/locations/{locId}/approve")
+    public void approveLocation(@PathVariable Long locId) {
+        specificLocationService.approveLocation(locId);
     }
 
-    @PatchMapping("/admin/locations/{locId}/reject")
-    public SpecificLocation rejectLocation(@PathVariable Long locId) {
-        return specificLocationService.rejectLocation(locId);
+    @GetMapping("/admin/locations/{locId}/reject")
+    public void rejectLocation(@PathVariable Long locId) {
+        specificLocationService.rejectLocation(locId);
     }
 
     @PatchMapping("/admin/locations/{locId}")
